@@ -70,12 +70,12 @@
                     <testFailureIgnore>true</testFailureIgnore>   <!-- senaryo fail olursa calismaya devam et  -->
                     <skipTests>false</skipTests>
                     <includes>
-                        <include>**/runners/Runner.java</include>       <!-- bu yolun dogru oldugunu kontrol et  -->
+                        <include>**/runners/*Paralell*.java</include>       <!-- bu yolun dogru oldugunu kontrol et  -->
                     </includes>
                 </configuration>
             </plugin>
 
-
+<!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -88,6 +88,7 @@
                     </includes>
                 </configuration>
             </plugin>
+            -->
 
 
             <!-- paralel test icin  -->
@@ -95,7 +96,7 @@
 
             <!-- cucumber report icin  -->
 
-            <!-- <plugin>
+            <plugin>
                  <groupId>net.masterthought</groupId>
                  <artifactId>maven-cucumber-reporting</artifactId>
                  <version>5.0.0</version>
@@ -120,7 +121,7 @@
                      </execution>
                  </executions>
              </plugin>
-             -->
+
 
         </plugins>
     </build>
