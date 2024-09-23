@@ -71,7 +71,7 @@
                     <testFailureIgnore>true</testFailureIgnore>   <!-- senaryo fail olursa calismaya devam et  -->
                     <skipTests>false</skipTests>
                     <includes>
-                        <include>**/runners/*Runner*.java</include>       <!-- bu yolun dogru oldugunu kontrol et  -->
+                        <include>**/runners/Runner.java</include>       <!-- bu yolun dogru oldugunu kontrol et  -->
                     </includes>
                 </configuration>
             </plugin>
