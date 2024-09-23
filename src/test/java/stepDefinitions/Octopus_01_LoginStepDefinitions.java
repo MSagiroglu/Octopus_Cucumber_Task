@@ -20,32 +20,32 @@ public class Octopus_01_LoginStepDefinitions {
     @Given("User enters valids email")
     public void user_enters_valids_email() {
 
-      // ReusableMethods.wait((int) (Math.random() * 5) + 1);
-      // Driver.getDriver().switchTo().frame(octopusLoginPages.reCaptchaiframe);
-      // ReusableMethods.click(octopusLoginPages.recaptcha);
-      // Driver.getDriver().switchTo().defaultContent();
-      // ReusableMethods.wait((int) (Math.random() * 5) + 1);
-      // actions.click(octopusLoginPages.enterEmail);
-      // octopusLoginPages.enterEmail.sendKeys(ConfigReader.getProperty("Email"));
+        // ReusableMethods.wait((int) (Math.random() * 5) + 1);
+        // Driver.getDriver().switchTo().frame(octopusLoginPages.reCaptchaiframe);
+        // ReusableMethods.click(octopusLoginPages.recaptcha);
+        // Driver.getDriver().switchTo().defaultContent();
+        // ReusableMethods.wait((int) (Math.random() * 5) + 1);
+        // actions.click(octopusLoginPages.enterEmail);
+        // octopusLoginPages.enterEmail.sendKeys(ConfigReader.getProperty("Email"));
         //actions.sendKeys(ConfigReader.getProperty("Email")).perform();
 
-         try {
-             if (octopusLoginPages.reCaptchaiframe.isDisplayed()) {
-                 Driver.getDriver().switchTo().frame(octopusLoginPages.reCaptchaiframe);
-                 ReusableMethods.click(octopusLoginPages.recaptcha);
-                 Driver.getDriver().switchTo().defaultContent();
-                 ReusableMethods.wait((int) (Math.random()*5)+1);
-                 actions.click(octopusLoginPages.enterEmail);
-                 ReusableMethods.wait((int) (Math.random()*5)+1);
-                 octopusLoginPages.enterEmail.sendKeys(ConfigReader.getProperty("Email"));
-                 //actions.sendKeys(ConfigReader.getProperty("Email")).perform();
+        try {
+            if (octopusLoginPages.reCaptchaiframe.isDisplayed()) {
+                Driver.getDriver().switchTo().frame(octopusLoginPages.reCaptchaiframe);
+                ReusableMethods.click(octopusLoginPages.recaptcha);
+                Driver.getDriver().switchTo().defaultContent();
+                ReusableMethods.wait((int) (Math.random() * 5) + 1);
+                actions.click(octopusLoginPages.enterEmail);
+                ReusableMethods.wait((int) (Math.random() * 5) + 1);
+                octopusLoginPages.enterEmail.sendKeys(ConfigReader.getProperty("Email"));
+                //actions.sendKeys(ConfigReader.getProperty("Email")).perform();
 
 
-             }
-         } catch (Exception e) {
-             actions.click(octopusLoginPages.enterEmail);
-             actions.sendKeys(ConfigReader.getProperty("Email")).perform();
-         }
+            }
+        } catch (Exception e) {
+            actions.click(octopusLoginPages.enterEmail);
+            actions.sendKeys(ConfigReader.getProperty("Email")).perform();
+        }
     }
 
     @Given("User enters valids password")
@@ -70,5 +70,24 @@ public class Octopus_01_LoginStepDefinitions {
         ReusableMethods.waitForVisibility(octopusLoginPages.dashboardText, 10);
         String dashboardText = octopusLoginPages.dashboardText.getText();
         Assert.assertTrue(dashboardText.contains(ConfigReader.getProperty("DashboardName")));
+    }
+
+    @Then("User should not be able to sign in")
+    public void userShouldNotBeAbleToSignIn() {
+        ReusableMethods.waitForVisibility(octopusLoginPages.emailRequiredText, 5);
+        Assert.assertTrue(octopusLoginPages.emailRequiredText.isDisplayed());
+        String actualEmailRequiredText = octopusLoginPages.emailRequiredText.getText();
+        String expectedEmailRequiredText = "E-posta gerekli";
+        Assert.assertEquals(expectedEmailRequiredText, actualEmailRequiredText);
+        ReusableMethods.waitForVisibility(octopusLoginPages.passwordRequiredText, 5);
+        Assert.assertTrue(octopusLoginPages.passwordRequiredText.isDisplayed());
+        String passwordRequiredText = octopusLoginPages.passwordRequiredText.getText();
+        String expectedPasswordRequiredText = "Şifre gerekli";
+        Assert.assertEquals(expectedPasswordRequiredText, passwordRequiredText);
+        ReusableMethods.waitForVisibility(octopusLoginPages.captchaRequiredText,5);
+        Assert.assertTrue(octopusLoginPages.captchaRequiredText.isDisplayed());
+        String captchaRequiredText = octopusLoginPages.captchaRequiredText.getText();
+        String expectedCaptchaRequiredText = "captcha gerekli bir alan";
+        Assert.assertEquals(expectedCaptchaRequiredText, captchaRequiredText);
     }
 }

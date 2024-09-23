@@ -34,5 +34,12 @@ public class OctopusLoginPages {
     @FindBy(xpath = "//*[@class='m-0 text-pageHeader font-bold text-primary-900']")
     public WebElement dashboardText;
 
+    @FindBy(xpath = "//*[text()='E-posta gerekli']")
+    public WebElement emailRequiredText;
+    @FindBy(xpath = "//*[text()='Şifre gerekli']")
+    public WebElement passwordRequiredText;
+    @FindBy(xpath = "//*[text()='captcha gerekli bir alan']")
+    public WebElement captchaRequiredText;
+
 
 }

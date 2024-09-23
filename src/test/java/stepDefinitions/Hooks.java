@@ -63,15 +63,15 @@ public class Hooks {
     //  }
 
 
-  //  @After//import io.cucumber.java.After;
-  //  public void tearDown(Scenario scenario) throws Exception {
-  //      if (scenario.isFailed()) {//-->Scenario fail olursa
-  //          TakesScreenshot ts = (TakesScreenshot) Driver.getDriver();
-  //          scenario.attach(ts.getScreenshotAs(OutputType.BYTES), "image/jpeg", scenario.getName());
-  //          Driver.quitDriver();
-  //      }
-  //      Driver.closeDriver();
-  //  }
+ @After//import io.cucumber.java.After;
+ public void tearDown(Scenario scenario) throws Exception {
+     if (scenario.isFailed()) {//-->Scenario fail olursa
+         TakesScreenshot ts = (TakesScreenshot) Driver.getDriver();
+         scenario.attach(ts.getScreenshotAs(OutputType.BYTES), "image/jpeg", scenario.getName());
+         Driver.quitDriver();
+     }
+     Driver.closeDriver();
+ }
 
 
 //Bu method fail olan scenario'larda fail olan kısmın resmini rapora ekleyecektir.
