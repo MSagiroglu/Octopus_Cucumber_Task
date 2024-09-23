@@ -15,6 +15,7 @@ public class Driver {
     private Driver() {
 
     }
+
     static ChromeOptions options;
 
 
@@ -27,13 +28,22 @@ public class Driver {
             switch (ConfigReader.getProperty("browser")) {
 
                 case "chrome":
-                   //options = new ChromeOptions();
-                   //options.addArguments("--no-sandbox");
-                   //options.addArguments("--disable-gpu");
-                    driver = new ChromeDriver();
+                    options = new ChromeOptions();
+                    options.addArguments("--no-sandbox",
+                            "--disable-dev-shm-usage",
+                            "--disable-gpu",
+                            "ignore-certificate-errors",
+                            "disable-extensions",
+                            "disable-popup-blocking",
+                            "disable-notifications",
+                            "disable-infobars");
+                    driver = new ChromeDriver(options);
                     break;
                 case "firefox":
                     driver = new FirefoxDriver();
+                    break;
+                case "edge":
+                    driver = new EdgeDriver();
                     break;
                 case "safari":
                     driver = new SafariDriver();
@@ -42,8 +52,8 @@ public class Driver {
                     options = new ChromeOptions();
                     options.addArguments("--headless");
                     driver = new ChromeDriver(options);
-                //bu secenekte chrome acilmadan test kosulur
-                break;
+                    //bu secenekte chrome acilmadan test kosulur
+                    break;
                 default:
                     driver = new EdgeDriver();
 
