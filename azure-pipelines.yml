@@ -1,6 +1,6 @@
 # Ana branch'e push yapıldığında pipeline tetiklenecek.
 trigger:
-  - main  # Kendi branch'ınıza göre ayarlayın.
+  - master  # Kendi branch'ınıza göre ayarlayın.
 
 pool:
   vmImage: 'ubuntu-latest'  # Alternatif: 'windows-latest' de kullanılabilir.
@@ -9,8 +9,8 @@ steps:
   # Java sürümünü indir ve ayarla.
   - task: JavaToolInstaller@0
     inputs:
-      versionSpec: '17'
-      jdkArchitectureOption: 'x64'
+      versionSpec: '17'  # Kullanmak istediğiniz Java sürümü.
+      jdkArchitectureOption: 'x64'  # 64 bit mimarisi.
       jdkSourceOption: 'AzureStorage'  # Azure Storage'dan indirilebilir veya pre-installed seçebilirsiniz.
 
   # Maven build işlemini gerçekleştir.
@@ -19,7 +19,7 @@ steps:
       mavenPomFile: 'pom.xml'  # Projenin pom.xml dosyasını belirtiyor.
       goals: 'clean verify'  # 'clean verify', testleri ve raporlamayı içerir.
       options: '-DskipTests=false'  # Testlerin çalıştırılması.
-      mavenOpts: '-Xmx1024m'  # JVM memory ayarı, gerekirse artırabilirsiniz.
+      mavenOpts: '-Xmx1024m'  # JVM bellek ayarı, gerekirse artırabilirsiniz.
 
   # Test sonuçlarını yayınla.
   - task: PublishTestResults@2
@@ -27,3 +27,23 @@ steps:
       testResultsFiles: '**/target/failsafe-reports/*.xml'  # Surefire ve Failsafe raporları.
       mergeTestResults: true  # Test sonuçları birleştirilsin.
     condition: succeededOrFailed()  # Testler başarısız olsa da pipeline devam eder.
+
+  # Cucumber raporlarını oluştur ve yayınla (isteğe bağlı).
+  - script: |
+      echo "Cucumber raporunu oluşturuyor"
+      mvn net.masterthought:maven-cucumber-reporting:generate
+    displayName: 'Cucumber Raporu Oluştur'
+
+  # Test sonuçlarını pipeline içinde arşivle (isteğe bağlı).
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.SourcesDirectory)/target'  # Raporların çıktığı yer.
+      artifact: 'test-results'  # Arşiv adı.
+      publishLocation: 'pipeline'  # Pipeline'da yayınlanacak.
+
+  # Cucumber raporlarını arşivle (isteğe bağlı).
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.SourcesDirectory)/target/cucumber-reports'  # Cucumber raporlarının çıktığı yer.
+      artifact: 'cucumber-reports'  # Arşiv adı.
+      publishLocation: 'pipeline'  # Pipeline'da yayınlanacak.
