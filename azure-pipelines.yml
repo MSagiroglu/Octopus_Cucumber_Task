@@ -1,29 +1,36 @@
-# Maven
-
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
-- master
+  - main  # Kendi branch'ınıza göre ayarlayın
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'  # Windows için 'windows-latest' de seçilebilir
 
 steps:
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.17'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'clean verify'
+  # Maven build için adım
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      goals: 'clean verify'  # 'clean test' yerine 'verify', test + raporlama
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.17'  # Java 17 kullanılıyor
+      options: '-DskipTests=false'  # Testleri çalıştırmak için false olarak ayarlandı
+      mavenOpts: '-Xmx1024m'  # JVM memory ayarı, gerekirse artırabilirsiniz
 
-- task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: '$(Pipeline.Workspace)'
-    artifact: 'AzureSelenium'
-    publishLocation: 'pipeline'    
+  # Test sonuçlarını yayınlama
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: '**/target/failsafe-reports/*.xml'  # Surefire/Failsafe raporları
+      mergeTestResults: true
+    condition: succeededOrFailed()  # Test başarısız olsa bile devam et
+
+  # Test sonuçlarını pipeline'da arşivle
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.SourcesDirectory)/target'
+      artifact: 'test-results'
+      publishLocation: 'pipeline'
+
+  # Cucumber raporunu oluştur ve yayınla (isteğe bağlı)
+  - script: |
+      echo "Cucumber raporunu oluşturuyor"
+      mvn net.masterthought:maven-cucumber-reporting:generate
+    displayName: 'Cucumber Raporu Oluştur'
