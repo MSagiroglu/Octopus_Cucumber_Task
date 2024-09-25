@@ -81,11 +81,11 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <parallel>methods</parallel>
-                    <threadCount>4</threadCount> <!--aynı anda 2 browser çalıştırılacağı anlamına gelir. -->
-                    <perCoreThreadCount>false</perCoreThreadCount>
-                    <forkCount>4</forkCount> <!-- iki ayrı işlemi başlatır ve her biri farklı bir test paketi çalıştırır. Bu, testlerin daha hızlı tamamlanmasını sağlar. Ancak, bu ayarın artırılması, sistemin kaynaklarını tüketebilir ve performans sorunlarına neden olabilir. -->
-                    <reuseForks>true</reuseForks> <!--Maven önceki testlerde oluşturulmuş işlemleri yeniden kullanır -->
+                    <parallel>none</parallel>
+                    <threadCount>1</threadCount> <!--aynı anda 2 browser çalıştırılacağı anlamına gelir. -->
+
+                    <forkCount>1</forkCount> <!-- iki ayrı işlemi başlatır ve her biri farklı bir test paketi çalıştırır. Bu, testlerin daha hızlı tamamlanmasını sağlar. Ancak, bu ayarın artırılması, sistemin kaynaklarını tüketebilir ve performans sorunlarına neden olabilir. -->
+                    <!--Maven önceki testlerde oluşturulmuş işlemleri yeniden kullanır -->
                     <argLine>-Duser.language=en</argLine>
                     <argLine>-Dfile.encoding=UTF-8</argLine>
                     <includes>
