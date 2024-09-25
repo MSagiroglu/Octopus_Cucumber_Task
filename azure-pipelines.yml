@@ -1,36 +1,29 @@
+# Ana branch'e push yapıldığında pipeline tetiklenecek.
 trigger:
-  - main  # Kendi branch'ınıza göre ayarlayın
+  - main  # Kendi branch'ınıza göre ayarlayın.
 
 pool:
-  vmImage: 'ubuntu-latest'  # Windows için 'windows-latest' de seçilebilir
+  vmImage: 'ubuntu-latest'  # Alternatif: 'windows-latest' de kullanılabilir.
 
 steps:
-  # Maven build için adım
+  # Java sürümünü indir ve ayarla.
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '17'
+      jdkArchitectureOption: 'x64'
+      jdkSourceOption: 'AzureStorage'  # Azure Storage'dan indirilebilir veya pre-installed seçebilirsiniz.
+
+  # Maven build işlemini gerçekleştir.
   - task: Maven@3
     inputs:
-      mavenPomFile: 'pom.xml'
-      goals: 'clean verify'  # 'clean test' yerine 'verify', test + raporlama
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.17'  # Java 17 kullanılıyor
-      options: '-DskipTests=false'  # Testleri çalıştırmak için false olarak ayarlandı
-      mavenOpts: '-Xmx1024m'  # JVM memory ayarı, gerekirse artırabilirsiniz
+      mavenPomFile: 'pom.xml'  # Projenin pom.xml dosyasını belirtiyor.
+      goals: 'clean verify'  # 'clean verify', testleri ve raporlamayı içerir.
+      options: '-DskipTests=false'  # Testlerin çalıştırılması.
+      mavenOpts: '-Xmx1024m'  # JVM memory ayarı, gerekirse artırabilirsiniz.
 
-  # Test sonuçlarını yayınlama
+  # Test sonuçlarını yayınla.
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: '**/target/failsafe-reports/*.xml'  # Surefire/Failsafe raporları
-      mergeTestResults: true
-    condition: succeededOrFailed()  # Test başarısız olsa bile devam et
-
-  # Test sonuçlarını pipeline'da arşivle
-  - task: PublishPipelineArtifact@1
-    inputs:
-      targetPath: '$(Build.SourcesDirectory)/target'
-      artifact: 'test-results'
-      publishLocation: 'pipeline'
-
-  # Cucumber raporunu oluştur ve yayınla (isteğe bağlı)
-  - script: |
-      echo "Cucumber raporunu oluşturuyor"
-      mvn net.masterthought:maven-cucumber-reporting:generate
-    displayName: 'Cucumber Raporu Oluştur'
+      testResultsFiles: '**/target/failsafe-reports/*.xml'  # Surefire ve Failsafe raporları.
+      mergeTestResults: true  # Test sonuçları birleştirilsin.
+    condition: succeededOrFailed()  # Testler başarısız olsa da pipeline devam eder.
