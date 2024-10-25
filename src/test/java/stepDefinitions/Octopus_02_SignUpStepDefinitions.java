@@ -79,6 +79,7 @@ public class Octopus_02_SignUpStepDefinitions {
         ReusableMethods.click(octopusSignUpPage.verificationCodeMail);
         Driver.getDriver().switchTo().frame(octopusSignUpPage.emailFrame);
         ReusableMethods.waitForVisibility(octopusSignUpPage.verificationCodeText,10);
+        ReusableMethods.scroll(octopusSignUpPage.verificationCodeText);
         String verificationCode = octopusSignUpPage.verificationCodeText.getText().replaceAll("[^0-9]", "");
         Driver.getDriver().switchTo().defaultContent();
         ReusableMethods.switchToWindow1(0);

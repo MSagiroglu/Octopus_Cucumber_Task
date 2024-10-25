@@ -11,7 +11,7 @@ public class OctopusSignUpPage {
         PageFactory.initElements(Driver.getDriver(), this);
     }
 
-    @FindBy(xpath = "//a[text()='Sign up']")
+    @FindBy(xpath = "//a[text()='Üye Ol']")
     public WebElement signUpButton;
 
     @FindBy(xpath = "//input[@id='auth-signup_name']")
@@ -72,7 +72,7 @@ public class OctopusSignUpPage {
     @FindBy(xpath = "//iframe[@id=\"iframeMail\"]")
     public WebElement emailFrame;
 
-    @FindBy(xpath = "//button[@class=\"ant-btn css-1oo3gz8 ant-btn-primary\"]")
+    @FindBy(xpath = "//button[contains(@class, 'ant-btn') and .//span[text()='Doğrula']]")
     public WebElement dogrula;
 
     @FindBy(xpath = "// b[contains(text(), 'Your verification code')]\n")
